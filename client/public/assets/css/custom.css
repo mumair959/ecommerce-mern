@@ -1,0 +1,16 @@
+.error-msg{
+    color: red;
+    font-size: 14px;
+}
+
+.top-product-img{
+    height: 228px;
+}
+
+.product-list-img{
+    height: 160px;
+}
+
+.w-100{
+    width: 100%;
+}
