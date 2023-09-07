@@ -22,7 +22,7 @@ const Dashboard = () => {
     const {data} = await axios.get('/dashboard/get-data');
     console.log(data);
     setDashboard(data.dashboard);
-};
+  };
 
   return (
       mounted && <>
