@@ -1,4 +1,5 @@
 import User from "../models/user";
+import { hashPassword } from "../helpers/auth";
   
 const getUserDetails = async (id) => {
   const user = await User.findById(id);
@@ -55,7 +56,63 @@ const updateUserDetails = async (body) => {
   }
 };
 
+const updatePassword = async (body) => {
+  let {id, email, password, newPassword, confirmNewPassword} = body;
+
+  // Response Format
+  let response = {success : true, message : '', error : {}};
+
+  // Validations
+  if(!email) {
+    response.success = false;
+    response.error['email'] = 'Email field is required';
+  }
+  if(!password) {
+      response.success = false;
+      response.error['password'] = 'Password field is required';
+  }
+  if(!newPassword) {
+      response.success = false;
+      response.error['newPassword'] = 'New password field is required';
+  }
+  if(!confirmNewPassword) {
+    response.success = false;
+    response.error['confirmNewPassword'] = 'Confirm new password field is required';
+  }
+  if(newPassword != confirmNewPassword) {
+    response.success = false;
+    response.error['newPassword'] = 'Password doesnot matched';
+  }
+
+  const user_exist = await User.find({_id : id,email : email});
+
+  if(user_exist = null) {
+    response.success = false;
+    response.error['email'] = 'User not exists';
+  }
+  
+  if (response.success == false) {
+      response.message = 'Invalid data given';
+      return response;
+  }
+
+  // UPDATE PROFILE DATA
+  try {
+    // UPDATING PROFILE DATA
+    const hashedPassword = await hashPassword(password);
+    const user = await User.findByIdAndUpdate(id,{password : hashedPassword},{new : true});
+    response.message = 'Password updated successfully';
+    response.data = user;
+    return response;
+  } catch (err) {
+    response.success = false;
+    response.message = 'Oops! Something went wrong';
+    return response;
+  }
+};
+
 export default {
   getUserDetails,
-  updateUserDetails
+  updateUserDetails,
+  updatePassword
 };

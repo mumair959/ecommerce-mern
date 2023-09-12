@@ -10,4 +10,6 @@ router.get(uri+"/get-auth-user-details", requireSignin, userController.getUserDe
 
 router.put(uri+"/update-user-info", requireSignin, userController.updateUserDetails);
 
+router.put(uri+"/update-password", requireSignin, userController.updatePassword);
+
 module.exports = router;
