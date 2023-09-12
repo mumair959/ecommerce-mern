@@ -25,7 +25,7 @@ const AccountBanner = () => {
                     </span>
                     <span>
                         <i className="fa-solid fa-phone me-2"></i>
-                        N/A
+                        {(state.user.phone == undefined) ? 'N/A' : state.user.phone}
                     </span>
                     <span>
                         <i className="fa-solid fa-envelope me-2"></i>

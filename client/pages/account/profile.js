@@ -14,6 +14,11 @@ const Profile = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [username, setUsername] = useState('');
+
+    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
     const [error, setError] = useState({});
 
     const [mounted, setMounted] = useState(false);
@@ -62,6 +67,29 @@ const Profile = () => {
         }
     };
 
+    const handleUpdatePassword = (e) => {
+        e.preventDefault();
+        try {
+            axios.put('/user/update-password',{
+                email,
+                password,
+                newPassword,
+                confirmNewPassword
+            }).then((res) => {
+                if(res.data.success == false){
+                    setError(res.data.error);
+                    toast.error(res.data.message);
+                }
+                else{
+                    toast.success(res.data.message);
+                    setError({});
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         mounted && <>
             <section className="my-account pt-6 pb-120">
@@ -86,7 +114,18 @@ const Profile = () => {
                                             setUsername={setUsername}
                                             error={error}
                                         />
-                                        <PasswordForm />
+                                        <PasswordForm 
+                                            handleUpdatePassword={handleUpdatePassword}
+                                            email={email}
+                                            setEmail={setEmail}
+                                            password={password}
+                                            setPassword={setPassword}
+                                            newPassword={newPassword}
+                                            setNewPassword={setNewPassword}
+                                            confirmNewPassword={confirmNewPassword}
+                                            setConfirmNewPassword={setConfirmNewPassword}
+                                            error={error}
+                                        />
                                     </div>
                                 </div>
                         </div>
